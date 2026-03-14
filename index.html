@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Birthday Surprise</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+
+<style>
+
+body{
+margin:0;
+font-family:'Poppins',sans-serif;
+overflow:hidden;
+text-align:center;
+color:#444;
+background:#050019;
+background:radial-gradient(circle at 0% 0%,#ff8ac9 0,transparent 55%),radial-gradient(circle at 100% 0%,#7d8bff 0,transparent 55%),radial-gradient(circle at 0% 100%,#ffd36b 0,transparent 55%),radial-gradient(circle at 100% 100%,#6af9ff 0,transparent 55%),linear-gradient(135deg,#050019 0,#140034 60%,#120020 100%);
+min-height:100vh;
+position:relative;
+}
+
+body::before,
+body::after{
+content:"";
+position:absolute;
+inset:-80px;
+background:radial-gradient(circle at 20% 0%,rgba(255,255,255,.09) 0,transparent 55%),radial-gradient(circle at 80% 100%,rgba(255,255,255,.04) 0,transparent 55%);
+mix-blend-mode:screen;
+pointer-events:none;
+animation:aurora 16s ease-in-out infinite alternate;
+z-index:-1;
+}
+
+@keyframes aurora{
+0%{transform:translate3d(0,0,0) scale(1)}
+50%{transform:translate3d(-30px,10px,0) scale(1.05)}
+100%{transform:translate3d(30px,-20px,0) scale(1.08)}
+}
+
+/* pages */
+
+.page{
+position:absolute;
+top:0;
+left:0;
+height:100vh;
+width:100%;
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:40px 20px;
+box-sizing:border-box;
+backdrop-filter:blur(18px);
+}
+
+.active{
+display:flex;
+animation:pageIn .8s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+@keyframes pageIn{
+0%{opacity:0;transform:translateY(18px) scale(.98);}
+60%{opacity:1;transform:translateY(-6px) scale(1);}
+100%{opacity:1;transform:translateY(0) scale(1);}
+}
+
+/* PAGE BACKGROUNDS */
+
+#loading{
+background:radial-gradient(circle at 0 0,rgba(255,255,255,.16) 0,transparent 55%),radial-gradient(circle at 100% 100%,rgba(255,255,255,.08) 0,transparent 55%);
+}
+
+#birthday{
+background:radial-gradient(circle at 0 100%,rgba(255,182,206,.16) 0,transparent 60%),radial-gradient(circle at 100% 0,rgba(255,233,153,.14) 0,transparent 60%);
+}
+
+#balloons{
+background:radial-gradient(circle at 10% 0,rgba(141,219,255,.16) 0,transparent 65%),radial-gradient(circle at 90% 100%,rgba(199,178,255,.18) 0,transparent 60%);
+}
+
+#final{
+background:radial-gradient(circle at 50% 0,rgba(255,216,137,.24) 0,transparent 65%),radial-gradient(circle at 0 100%,rgba(255,143,196,.18) 0,transparent 60%);
+}
+
+
+/* floating animation */
+
+@keyframes float{
+0%{transform:translateY(0)}
+50%{transform:translateY(-30px)}
+100%{transform:translateY(0)}
+}
+
+
+/* loading */
+
+.loadingBalloon{
+font-size:130px;
+animation:float 4s ease-in-out infinite,glowPulse 2.3s ease-in-out infinite;
+filter:drop-shadow(0 0 16px rgba(255,255,255,.55));
+}
+
+.loadingText{
+font-size:42px;
+margin-top:20px;
+font-weight:700;
+letter-spacing:.03em;
+color:#f5f1ff;
+font-family:'Nunito',sans-serif;
+text-shadow:0 0 16px rgba(107,92,255,.9);
+}
+
+@keyframes glowPulse{
+0%,100%{transform:translateY(0) scale(1);text-shadow:0 0 18px rgba(255,255,255,.45);}
+50%{transform:translateY(-10px) scale(1.05);text-shadow:0 0 30px rgba(255,255,255,.85);}
+}
+
+
+/* birthday page */
+
+.title{
+font-size:70px;
+font-weight:800;
+font-family:'Nunito',sans-serif;
+color:#ffe4ff;
+text-shadow:0 6px 22px rgba(0,0,0,.65);
+letter-spacing:.03em;
+}
+
+.subtitle{
+font-size:65px;
+margin-top:20px;
+font-family:'Nunito',sans-serif;
+color:#ffd2f0;
+text-shadow:0 5px 18px rgba(0,0,0,.65);
+}
+
+.small{
+font-size:18px;
+width:60%;
+max-width:620px;
+margin-top:22px;
+color:#f3e7ff;
+line-height:1.6;
+opacity:.9;
+}
+
+
+/* photo frame */
+
+.frame{
+width:260px;
+height:260px;
+border-radius:50%;
+overflow:hidden;
+border:7px solid rgba(255,255,255,.98);
+box-shadow:0 26px 60px rgba(0,0,0,.85),0 0 26px rgba(255,185,220,.65);
+margin-top:30px;
+position:relative;
+background:radial-gradient(circle at 30% 0%,rgba(255,255,255,.4) 0,transparent 60%),radial-gradient(circle at 80% 120%,rgba(255,179,222,.45) 0,transparent 60%);
+animation:float 6s ease-in-out infinite;
+}
+
+.frame img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.crown{
+position:absolute;
+top:-50px;
+left:50%;
+transform:translateX(-50%);
+font-size:65px;
+filter:drop-shadow(0 10px 16px rgba(0,0,0,.6));
+animation:float 4.8s ease-in-out infinite;
+}
+
+
+/* button */
+
+.magicBtn{
+margin-top:30px;
+padding:16px 40px;
+font-size:20px;
+border:none;
+border-radius:999px;
+background:linear-gradient(120deg,#ff6fa5,#ffb86b);
+color:white;
+cursor:pointer;
+transition:transform .25s ease,box-shadow .25s ease,filter .25s ease;
+font-weight:700;
+letter-spacing:.04em;
+text-transform:uppercase;
+box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 22px rgba(255,136,188,.75);
+}
+
+.magicBtn:hover{
+transform:translateY(-4px) scale(1.03);
+box-shadow:0 26px 60px rgba(0,0,0,.9),0 0 32px rgba(255,179,222,.95);
+filter:brightness(1.05);
+}
+
+.magicBtn:active{
+transform:translateY(0) scale(0.98);
+box-shadow:0 14px 26px rgba(0,0,0,.6);
+}
+
+
+/* balloons */
+
+.balloon{
+position:absolute;
+font-size:110px;
+cursor:pointer;
+animation:float 4s infinite ease-in-out;
+transition:transform .18s ease,filter .18s ease;
+filter:drop-shadow(0 18px 30px rgba(0,0,0,.75));
+}
+
+.balloon:hover{
+transform:translateY(-18px) scale(1.06) rotate(-4deg);
+filter:drop-shadow(0 26px 42px rgba(0,0,0,.9));
+}
+
+
+/* POP animation */
+
+@keyframes popAnim{
+0%{transform:scale(1)}
+40%{transform:scale(1.4)}
+100%{transform:scale(0);opacity:0}
+}
+
+.popped{
+animation:popAnim .35s forwards;
+}
+
+
+/* popup */
+
+.popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+display:none;
+background:radial-gradient(circle at 0 0,rgba(255,157,210,.45) 0,transparent 55%),radial-gradient(circle at 100% 100%,rgba(157,199,255,.4) 0,transparent 55%),rgba(3,0,20,.86);
+justify-content:center;
+align-items:center;
+backdrop-filter:blur(24px);
+z-index:20;
+}
+
+.popupBox{
+background:linear-gradient(145deg,rgba(13,0,32,.95),rgba(32,0,56,.97));
+padding:25px;
+border-radius:24px;
+width:340px;
+position:relative;
+box-shadow:0 26px 70px rgba(0,0,0,.9),0 0 30px rgba(255,173,216,.8);
+transform:scale(.8) translateY(16px);
+opacity:0;
+transition:all .35s cubic-bezier(.22,.61,.36,1);
+}
+
+.popup.show .popupBox{
+transform:scale(1) translateY(0);
+opacity:1;
+}
+
+.popupBox img{
+width:100%;
+border-radius:18px;
+box-shadow:0 18px 40px rgba(0,0,0,.85);
+}
+
+.popupBox p{
+margin-top:18px;
+font-size:16px;
+color:#f8eaff;
+line-height:1.7;
+}
+
+.close{
+position:absolute;
+right:15px;
+top:10px;
+font-size:22px;
+cursor:pointer;
+color:#ffb8de;
+transition:transform .18s ease,color .18s ease;
+}
+
+.close:hover{
+transform:scale(1.18) rotate(6deg);
+color:#ffffff;
+}
+
+
+/* CONFETTI */
+
+.confetti{
+position:absolute;
+width:12px;
+height:12px;
+border-radius:3px;
+animation:explode 1.6s cubic-bezier(.17,.67,.38,1.3) forwards;
+box-shadow:0 0 6px rgba(0,0,0,.6);
+}
+
+@keyframes explode{
+
+0%{
+transform:translate(0,0) rotate(0deg);
+opacity:1;
+}
+
+100%{
+transform:translate(var(--x),var(--y)) rotate(720deg);
+opacity:0;
+}
+
+}
+
+
+/* screen shake */
+
+@keyframes shake{
+0%{transform:translateX(0)}
+25%{transform:translateX(-6px)}
+50%{transform:translateX(6px)}
+75%{transform:translateX(-4px)}
+100%{transform:translateX(0)}
+}
+
+.shake{
+animation:shake .4s;
+}
+
+
+/* final page */
+
+.cake{
+font-size:120px;
+animation:float 3s infinite ease-in-out,glowPulse 2.1s ease-in-out infinite;
+filter:drop-shadow(0 0 24px rgba(255,229,153,.95));
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- LOADING PAGE -->
+
+<div class="page active" id="loading">
+
+<div class="loadingBalloon">🎈</div>
+
+<div class="loadingText">ur surprise is loading...</div>
+
+</div>
+
+
+
+<!-- BIRTHDAY PAGE -->
+
+<div class="page" id="birthday">
+
+<div class="title">Happy Birthday Akshara✨</div>
+
+<div class="frame">
+
+<div class="crown">👑</div>
+
+<img src="pic0.jpeg">
+
+</div>
+
+<div class="subtitle">You a Queen👑</div>
+
+<div class="small">
+few balloons to pop on the next page for ya.
+click the button to get to the magic.
+</div>
+
+<button class="magicBtn" onclick="startMagic()">start the magic✨</button>
+
+</div>
+
+
+
+<!-- BALLOON PAGE -->
+
+<div class="page" id="balloons">
+
+<div class="balloon" style="top:15%;left:20%" onclick="pop(0,this)">🎈</div>
+<div class="balloon" style="top:15%;left:45%" onclick="pop(1,this)">🎈</div>
+<div class="balloon" style="top:15%;left:70%" onclick="pop(2,this)">🎈</div>
+
+<div class="balloon" style="top:40%;left:35%" onclick="pop(3,this)">🎈</div>
+<div class="balloon" style="top:40%;left:60%" onclick="pop(4,this)">🎈</div>
+
+<div class="balloon" style="top:70%;left:10%" onclick="pop(5,this)">🎈</div>
+<div class="balloon" style="top:70%;left:30%" onclick="pop(6,this)">🎈</div>
+<div class="balloon" style="top:70%;left:50%" onclick="pop(7,this)">🎈</div>
+<div class="balloon" style="top:70%;left:70%" onclick="pop(8,this)">🎈</div>
+<div class="balloon" style="top:70%;left:85%" onclick="pop(9,this)">🎈</div>
+
+</div>
+
+
+
+<!-- POPUP -->
+
+<div class="popup" id="popup">
+
+<div class="popupBox">
+
+<div class="close" onclick="closePopup()">✖</div>
+
+<img id="popupImg">
+
+<p id="popupText"></p>
+
+</div>
+
+</div>
+
+
+
+<!-- FINAL PAGE -->
+
+<div class="page" id="final">
+
+<div class="title">You Popped em all! 🎉</div>
+
+<div class="cake">🎂</div>
+
+<div class="small">
+Srsly tho been missin u a fkin lot. Hope u have the best birthday celebration over there. wish I could steal a moment with u too if u get the chance. Hope this new year’s filled with a lot more happier moments nd even more success for everything ur working towards. Love ya akkiii. see ya sooner than later.
+</div>
+
+</div>
+
+
+
+<script>
+
+setTimeout(()=>{
+
+document.getElementById("loading").classList.remove("active")
+document.getElementById("birthday").classList.add("active")
+
+},3500)
+
+
+
+function startMagic(){
+
+document.getElementById("birthday").classList.remove("active")
+document.getElementById("balloons").classList.add("active")
+
+}
+
+
+
+/* EDIT YOUR BALLOON IMAGES HERE */
+
+const images=[
+"pic1.jpeg","pic2.jpeg","pic3.jpeg","pic4.jpeg","pic5.jpeg",
+"pic6.jpeg","pic7.jpeg","pic8.jpeg","pic9.jpeg","pic10.jpeg"
+]
+
+
+
+/* EDIT YOUR MESSAGES HERE */
+
+const messages=[
+"One of my favourite memories",
+"This pic's so cute",
+"One of the funniest shi",
+"Madam ji tho hona hena(in uniform)👑",
+"Just had to put this in😂",
+"hahaha",
+"A fkin telugu baddie over here🔥🔥",
+"Ik ya miss him, so gotta have him on here",
+"Ya idk y I have this on but, fk that bear",
+"happy birthday again akkiiii🎉"
+]
+
+
+let popped=0
+
+
+function confetti(x,y){
+
+for(let i=0;i<35;i++){
+
+let c=document.createElement("div")
+
+c.className="confetti"
+
+c.style.left=x+"px"
+c.style.top=y+"px"
+
+c.style.background=`hsl(${Math.random()*360},80%,60%)`
+
+c.style.setProperty('--x',(Math.random()*600-300)+'px')
+c.style.setProperty('--y',(Math.random()*600+200)+'px')
+
+document.body.appendChild(c)
+
+setTimeout(()=>c.remove(),1600)
+
+}
+
+}
+
+
+
+function pop(i,el){
+
+confetti(el.offsetLeft,el.offsetTop)
+
+el.classList.add("popped")
+
+setTimeout(()=>{el.style.display="none"},300)
+
+document.getElementById("popupImg").src=images[i]
+document.getElementById("popupText").innerText=messages[i]
+
+const popup=document.getElementById("popup")
+popup.style.display="flex"
+setTimeout(()=>popup.classList.add("show"),10)
+
+popped++
+
+if(popped===10){
+
+document.body.classList.add("shake")
+
+setTimeout(()=>{
+
+for(let i=0;i<120;i++){
+confetti(window.innerWidth/2,window.innerHeight/2)
+}
+
+document.getElementById("balloons").classList.remove("active")
+document.getElementById("final").classList.add("active")
+
+},2500)
+
+}
+
+}
+
+
+function closePopup(){
+
+const popup=document.getElementById("popup")
+popup.classList.remove("show")
+setTimeout(()=>popup.style.display="none",250)
+
+}
+
+</script>
+
+</body>
+</html>
